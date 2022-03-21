@@ -141,3 +141,8 @@ pip install --ignore-installed python-openstackclient
 sed -i 's/import queue/from multiprocessing import Queue as queue/g' /usr/lib/python2.7/site-packages/openstack/utils.py
 sed -i 's/import queue/from multiprocessing import Queue as queue/g' /usr/lib/python2.7/site-packages/openstack/cloud/openstackcloud.py
 ```
+
+# To check Tungsten Fabric status (on the Control node)
+```bash
+contrail-status
+```
