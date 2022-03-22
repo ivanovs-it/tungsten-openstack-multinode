@@ -1,18 +1,16 @@
 # tungsten-openstack-multinode
 
-Openstack (Train) cluster installation with [Tungsten Fabric](https://tungsten.io/) as a Neutron network backend (using [tf-ansible-deployer](http://github.com/tungstenfabric/tf-ansible-deployer) as deployment tool). 
+Openstack (Train) cluster installation with [Tungsten Fabric](https://tungsten.io/) as a Neutron network backend (using [tf-ansible-deployer](http://github.com/tungstenfabric/tf-ansible-deployer) as deployment tool). Sample example with controllers combined with compute nodes.
 
 Hosted OS is CentOS Linux release 7.9.2009 (Core)
 
 ##### Prerequisites
 | Host  | Interface (eth0)| Interface (eth1) |
 | ------| --------------- | ---------------- |
-| Seed  | 10.0.0.10/24    | w/o IP |
+| Seed  | 10.0.0.10/24    | not required |
 | Ctl01 | 10.0.0.21/24    | w/o IP |
 | Ctl02 | 10.0.0.22/24    | w/o IP |
 | Ctl03 | 10.0.0.23/24    | w/o IP |
-| Cmp01 | 10.0.0.51/24    | w/o IP |
-| Cmp02 | 10.0.0.52/24    | w/o IP |
 
 ##### On the Seed node
 * Install required packages
@@ -43,7 +41,7 @@ ssh-keygen -b 2048 -t rsa -f /root/.ssh/id_rsa -q -N ""
 cat ~/.ssh/id_rsa.pub >> ~/.ssh/authorized_keys
 ```
 * Copy public key to all nodes for root user
-* Create LVM Volume group for cinder volumes (on the Compute Nodes)
+* Create LVM Volume group for cinder volumes (for all nodes)
 ```bash
 sudo yum install -y lvm2
 sudo pvcreate /dev/vdb
@@ -81,7 +79,9 @@ instances:
       analytics_database:
       analytics:
       webui:
+      vrouter:
       openstack:
+      openstack_compute:
   ctl03:
     provider: bms
     ip: 10.0.0.23
@@ -92,18 +92,8 @@ instances:
       analytics_database:
       analytics:
       webui:
+      vrouter:
       openstack:
-  cmp01:
-    provider: bms
-    ip: 10.0.0.51
-    roles:
-      vrouter:
-      openstack_compute:
-  cmp02:
-    provider: bms
-    ip: 10.0.0.52
-    roles:
-      vrouter:
       openstack_compute:
 global_configuration:
 contrail_configuration:
